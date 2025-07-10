@@ -175,6 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Thêm sự kiện cho nút loa
     btnSpeakTotalCash.addEventListener('click', () => {
       const words = txtFinalCashInWords.textContent.replace('Total Cash In Words: ', '');
-      speakTotalCashFPT(words);
+      speakTotalCash(words);
     });
 });
