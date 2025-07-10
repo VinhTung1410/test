@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Hàm đọc tổng số tiền bằng FPT.AI
-    async function speakTotalCash(words) {
+    async function speakTotalCashFPT(words) {
       const apiKey = "0ZT07pR1crUIWOxM67kURF01CAepJKmc";
       const url = "https://api.fpt.ai/hmi/tts/v5";
       try {
@@ -138,23 +138,41 @@ document.addEventListener('DOMContentLoaded', () => {
           headers: {
             "api-key": apiKey,
             "speed": "0",
-            "voice": "banmai",
+            "voice": "banmai", // Đảm bảo luôn có giá trị voice
             "Content-Type": "text/plain"
           },
           body: words
         });
-        if (!response.ok) throw new Error("FPT.AI API error");
+        if (!response.ok) throw new Error("FPT.AI API error: " + response.status);
         const audioUrl = response.headers.get("location");
         if (audioUrl) {
           const audio = new Audio(audioUrl);
           audio.play();
         } else {
+          alert("Không lấy được file âm thanh từ FPT.AI. Đang chuyển sang giọng đọc mặc định.");
           throw new Error("No audio URL returned");
         }
       } catch (e) {
-        // Fallback: dùng SpeechSynthesisUtterance nếu API lỗi
-        speakTotalCash(words);
+        console.error("FPT.AI TTS error:", e);
+        alert("Không thể sử dụng giọng đọc FPT.AI. Đang chuyển sang giọng đọc mặc định.");
+        speakTotalCashLocal(words);
       }
+    }
+
+    // Hàm đọc bằng SpeechSynthesisUtterance (local)
+    function speakTotalCashLocal(words) {
+      const utterance = new SpeechSynthesisUtterance();
+      utterance.text = words;
+      utterance.lang = 'vi-VN';
+      utterance.volume = 1;
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      const voices = window.speechSynthesis.getVoices();
+      const vietnameseVoice = voices.find(voice => voice.lang === 'vi-VN');
+      if (vietnameseVoice) {
+        utterance.voice = vietnameseVoice;
+      }
+      window.speechSynthesis.speak(utterance);
     }
 
     // Populate voices when they are loaded
@@ -172,9 +190,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
 
-    // Thêm sự kiện cho nút loa
+    // Sự kiện nút loa:
     btnSpeakTotalCash.addEventListener('click', () => {
       const words = txtFinalCashInWords.textContent.replace('Total Cash In Words: ', '');
-      speakTotalCash(words);
+      speakTotalCashFPT(words);
     });
 });
