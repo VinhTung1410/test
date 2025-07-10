@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Hàm đọc tổng số tiền bằng FPT.AI
-    async function speakTotalCashFPT(words) {
+    async function speakTotalCash(words) {
       const apiKey = "0ZT07pR1crUIWOxM67kURF01CAepJKmc";
       const url = "https://api.fpt.ai/hmi/tts/v5";
       try {
