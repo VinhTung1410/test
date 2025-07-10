@@ -128,25 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return words.trim() + ' Đồng';
     }
 
-    // Function to speak only the cash amount in words
-    function speakTotalCash(words) {
-      const utterance = new SpeechSynthesisUtterance();
-      utterance.text = words; // Chỉ đọc phần số tiền bằng chữ (ví dụ: "Một triệu đồng")
-      utterance.lang = 'vi-VN'; // Set language to Vietnamese
-      utterance.volume = 1; // 0 to 1
-      utterance.rate = 1; // Speed of speech
-      utterance.pitch = 1; // Pitch of voice
-
-      // Try to find a Vietnamese voice
-      const voices = window.speechSynthesis.getVoices();
-      const vietnameseVoice = voices.find(voice => voice.lang === 'vi-VN');
-      if (vietnameseVoice) {
-        utterance.voice = vietnameseVoice;
-      }
-
-      window.speechSynthesis.speak(utterance);
-    }
-
     // Hàm đọc tổng số tiền bằng FPT.AI
     async function speakTotalCashFPT(words) {
       const apiKey = "0ZT07pR1crUIWOxM67kURF01CAepJKmc";
